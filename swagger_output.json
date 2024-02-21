@@ -5,7 +5,7 @@
     "title": "REST API",
     "description": ""
   },
-  "host": "localhost:3000",
+  "host": "localhost:8080",
   "basePath": "/",
   "schemes": [
     "http"
@@ -20,6 +20,9 @@
           },
           "500": {
             "description": "Internal Server Error"
+          },
+          "default": {
+            "description": ""
           }
         }
       },
@@ -36,9 +39,32 @@
       },
       "patch": {
         "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "teamNumber": {
+                  "example": "any"
+                },
+                "sheet": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }

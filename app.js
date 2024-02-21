@@ -4,6 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const conn = require("./db/conn");
+const cors = require('cors');
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -16,6 +17,9 @@ const swaggerFile = require("./swagger_output.json");
 
 var app = express();
 conn();
+
+app.use(cors());
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -49,8 +53,8 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log("Listening on http://localhost:3000");
+app.listen(process.env.PORT || 8080, () => {
+  console.log("Listening on http://localhost:8080");
 });
 
 module.exports = app;
