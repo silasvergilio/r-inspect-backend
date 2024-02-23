@@ -3,8 +3,12 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-const conn = require("./db/conn");
 const cors = require('cors');
+
+require('dotenv').config();
+
+const conn = require("./db/conn");
+
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -30,6 +34,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+const validateApiKey = require('./middlewares/validateApiKey').default;
+app.use(validateApiKey);
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
