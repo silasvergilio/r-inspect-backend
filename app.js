@@ -15,6 +15,7 @@ var usersRouter = require("./routes/users");
 var teamsRouter = require("./routes/teams");
 var inspectorRouter = require("./routes/inspector");
 var inspectionRouter = require("./routes/inspection");
+var adminRouter = require("./routes/admin");
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger_output.json");
@@ -35,7 +36,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-const validateApiKey = require('./middlewares/validateApiKey').default;
+const validateApiKey = require('./middlewares/validateApiKey');
 app.use(validateApiKey);
 
 app.use("/", indexRouter);
@@ -43,6 +44,7 @@ app.use("/users", usersRouter);
 app.use("/teams", teamsRouter);
 app.use("/inspector", inspectorRouter);
 app.use("/inspection", inspectionRouter);
+app.use("/admin", adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

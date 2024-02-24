@@ -6,6 +6,7 @@ const endpointsFiles = ["./routes/index.js",
                         "./routes/inspection.js",
                         "./routes/inspector.js",
                         "./routes/users.js",
+                        "./routes/admin.js"
                     ];
 
 swaggerAutogen(outputFile, endpointsFiles);

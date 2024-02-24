@@ -15,4 +15,4 @@ function validateApiKey(req, res, next) {
     next();
 }
 
-export default validateApiKey;
+module.exports = validateApiKey;

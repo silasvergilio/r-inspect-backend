@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node app.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
-    "swagger-autogen": "node swagger.js"
+    "swagger-autogen": "node ./swagger.js"
   },
   "dependencies": {
     "axios": "^1.6.2",
