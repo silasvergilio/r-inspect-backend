@@ -7,9 +7,22 @@ const teamsService = new TeamsService();
 
 const adminSecretKey = process.env.ADMIN_SECRET_KEY || "";
 
+
 router.get("/CreateCleanSheetsForTeams", async (req, res) => {
+    // #swagger.tags = ['admin']
+    // #swagger.description = 'Endpoint to create clean sheets for all teams. Requires admin secret key for authorization.'
+    // #swagger.parameters['admin-secret-key'] = {
+    //     in: 'header',
+    //     description: 'Admin secret key for authentication',
+    //     type: 'string',
+    //     required: true
+    // }
+    // #swagger.responses[201] = { description: 'Clean sheets for all teams created successfully.' }
+    // #swagger.responses[400] = { description: 'Inspections table must be empty before running this operation or no teams found to create clean sheets for.' }
+    // #swagger.responses[403] = { description: 'Unauthorized access.' }
+    // #swagger.responses[500] = { description: 'Failed to create clean sheets for teams.' }
     try {
-        const payloadAdminSecretKey = req.headers['admin-secret-key'] || req.query.secretKey;
+        const payloadAdminSecretKey = req.headers['admin-secret-key'];
 
         if (!payloadAdminSecretKey || adminSecretKey !== payloadAdminSecretKey) {
             return res.status(403).send("Unauthorized access.");
