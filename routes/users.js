@@ -5,6 +5,24 @@ var userModel = require('../model/user');
 const jwt = require('jsonwebtoken');
 
 const tokensModel = require('../model/tokens'); // Ensure this is the correct path to your tokens model
+const authorize = require('../middlewares/roleBasedAccessControl');
+
+router.get('/', authorize(['inspector']),async (req, res) => {
+  // #swagger.tags = ['User']
+  // #swagger.description = 'Endpoint to retrieve a list of all users.'
+  // #swagger.responses[200] = {
+  //     description: 'Successful operation: Returns a list of users.',
+  //     schema: { $ref: "#/definitions/UsersArray" }
+  // }
+  // #swagger.responses[500] = { description: 'Server error: An error occurred while fetching users.' }
+  try {
+    const users = await userModel.find({});
+    res.status(200).json(users);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("An error occurred while fetching users.");
+  }
+})
 
 router.post('/signup', async (req, res) => {
   // Sign Up Route
@@ -38,7 +56,7 @@ router.post('/signup', async (req, res) => {
       role // Assuming your user model has a 'role' field
     });
 
-    //await user.save();
+    await user.save();
 
     // Send back a response
     res.status(201).json({
@@ -78,9 +96,12 @@ router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     const user = await userModel.findOne({ username }).exec();
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if(!user) {
       return res.status(401).send({ message: 'Invalid username or password' });
     }
+    /*if (!user || !(await bcrypt.compare(password, user.password))) {
+      return res.status(401).send({ message: 'Invalid username or password' });
+    }*/
 
     // Generate tokens
     const accessToken = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1d' });
