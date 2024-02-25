@@ -83,10 +83,39 @@
         }
       }
     },
+    "/users/me": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "description": "Endpoint to retrieve the user associated with the provided auth token.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/users/login": {
       "post": {
         "tags": [
-          "User"
+          "user"
         ],
         "description": "Endpoint for user login.",
         "parameters": [
@@ -130,6 +159,11 @@
         "description": "Endpoint to refresh access token.",
         "parameters": [
           {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "schema": {
@@ -162,6 +196,11 @@
         ],
         "description": "Endpoint to log out a user.",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -239,6 +278,13 @@
         ],
         "summary": "Add a new inspector to the database",
         "description": "Endpoint to add a new inspector to the database.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "204": {
             "description": "Inspector created successfully."
@@ -260,6 +306,13 @@
         ],
         "summary": "Retrieve all inspectors",
         "description": "Endpoint to retrieve a list of all inspectors from the database.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -277,31 +330,18 @@
       }
     },
     "/inspection/": {
-      "post": {
-        "tags": [
-          "Inspection"
-        ],
-        "description": "Creates a new inspection with the provided details.",
-        "responses": {
-          "204": {
-            "description": "Inspection created successfully."
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "500": {
-            "description": "Error occurred while creating the inspection."
-          }
-        }
-      },
       "get": {
         "tags": [
           "Inspection"
         ],
         "description": "Retrieves a list of all inspections.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
@@ -317,25 +357,36 @@
           }
         }
       },
-      "patch": {
+      "post": {
         "tags": [
           "Inspection"
         ],
-        "description": "Updates an existing inspection based on the team number.",
+        "description": "Creates a new inspection.",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
+                "inspectorId": {
+                  "example": "any"
+                },
                 "teamNumber": {
                   "example": "any"
                 },
-                "sheet": {
+                "teamName": {
                   "example": "any"
                 },
                 "status": {
+                  "example": "any"
+                },
+                "sheet": {
                   "example": "any"
                 }
               }
@@ -344,7 +395,10 @@
         ],
         "responses": {
           "201": {
-            "description": "Inspection updated successfully."
+            "description": "Inspection created successfully."
+          },
+          "400": {
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -353,7 +407,109 @@
             "description": "Forbidden"
           },
           "500": {
+            "description": "Error occurred while creating the inspection."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Inspection"
+        ],
+        "description": "Updates an existing inspection based on the team number.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "inspectorId": {
+                  "example": "any"
+                },
+                "teamNumber": {
+                  "example": "any"
+                },
+                "teamName": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "sheet": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Inspection updated successfully."
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
             "description": "Error occurred while updating the inspection."
+          }
+        }
+      }
+    },
+    "/inspection/{teamNumber}": {
+      "get": {
+        "tags": [
+          "Inspection"
+        ],
+        "description": "Retrieves an inspection based on the team number.",
+        "parameters": [
+          {
+            "name": "teamNumber",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Team number"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inspection found.",
+            "schema": {
+              "$ref": "#/definitions/Inspection"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Inspection not found."
+          },
+          "500": {
+            "description": "Error occurred while retrieving the inspection."
           }
         }
       }
@@ -367,6 +523,11 @@
         "parameters": [
           {
             "name": "admin-secret-key",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
             "in": "header",
             "type": "string"
           }
@@ -397,6 +558,11 @@
         ],
         "description": "Endpoint to register a new user.",
         "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "body",
             "in": "body",
@@ -441,14 +607,16 @@
         "description": "Endpoint\r  //",
         "parameters": [
           {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
             "name": "body",
             "in": "body",
             "schema": {
               "type": "object",
               "properties": {
-                "id": {
-                  "example": "any"
-                },
                 "username": {
                   "example": "any"
                 },

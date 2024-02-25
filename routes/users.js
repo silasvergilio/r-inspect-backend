@@ -24,6 +24,25 @@ router.get('/', authorize(['inspector_coordinator']),async (req, res) => {
   }
 })
 
+router.get('/me', authorize(['inspector', 'inspector_coordinator']), async (req, res) => {
+  // #swagger.tags = ['user']
+  // #swagger.description = 'Endpoint to retrieve the user associated with the provided auth token.'
+  // #swagger.responses[200] = {
+  //     description: 'Successful operation: Returns the user object.',
+  //     schema: { $ref: "#/definitions/UserObject" } // Assuming UserObject is the correct definition for a single user
+  // }
+  // #swagger.responses[500] = { description: 'Server error: An error occurred while fetching the user.' }
+
+  try {
+    const user = await userModel.findById(req.user.userId); // Adjust to match how your user ID is stored
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("An error occurred while fetching the user.");
+  }
+});
+
+
 // Assuming JWT_SECRET and REFRESH_TOKEN_SECRET are defined in your environment
 const { JWT_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 
