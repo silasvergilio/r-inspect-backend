@@ -2,6 +2,8 @@ var express = require("express");
 var router = express.Router();
 var inspectorModel = require("../model/inspector");
 
+const authorize = require('../middlewares/roleBasedAccessControl');
+
 router.post("/", authorize(['inspector_coordinator']), async function (req, res, next) {
   // POST /inspector
   // Adds a new inspector to the database

@@ -9,6 +9,7 @@ const teamsService = new TeamsService();
 
 const adminSecretKey = process.env.ADMIN_SECRET_KEY || "";
 
+const authorize = require('../middlewares/roleBasedAccessControl');
 
 router.get("/CreateCleanSheetsForTeams", authorize(['inspector_coordinator']), async (req, res) => {
     // #swagger.tags = ['admin']

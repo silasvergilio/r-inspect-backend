@@ -3,6 +3,8 @@ var router = express.Router();
 var inspectorModel = require("../model/inspector");
 var inspectionModel = require("../model/inspection");
 
+const authorize = require('../middlewares/roleBasedAccessControl');
+
 
 router.get("/", authorize(['inspector', 'inspector_coordinator']), async (req, res, next) => {
   // Get Inspections
