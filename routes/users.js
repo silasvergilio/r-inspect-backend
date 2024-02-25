@@ -1,14 +1,14 @@
 var express = require('express');
 var router = express.Router();
-var bcrypt = require('bcryptjs');
 var userModel = require('../model/user');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const tokensModel = require('../model/tokens'); // Ensure this is the correct path to your tokens model
 const authorize = require('../middlewares/roleBasedAccessControl');
 
-router.get('/', authorize(['inspector']),async (req, res) => {
-  // #swagger.tags = ['User']
+router.get('/', authorize(['inspector_coordinator']),async (req, res) => {
+  // #swagger.tags = ['user']
   // #swagger.description = 'Endpoint to retrieve a list of all users.'
   // #swagger.responses[200] = {
   //     description: 'Successful operation: Returns a list of users.',
@@ -24,60 +24,12 @@ router.get('/', authorize(['inspector']),async (req, res) => {
   }
 })
 
-router.post('/signup', async (req, res) => {
-  // Sign Up Route
-  // #swagger.tags = ['User']
-  // #swagger.description = 'Endpoint to register a new user.'
-  // #swagger.parameters['user'] = {
-  //     in: 'body',
-  //     description: 'User registration data',
-  //     required: true,
-  //     schema: { $ref: "#/definitions/UserSignUp" }
-  // }
-  // #swagger.responses[201] = {
-  //     description: 'User created successfully.',
-  //     schema: { $ref: "#/definitions/User" }
-  // }
-  // #swagger.responses[500] = { description: 'Error occurred while creating user.' }
-
-  try {
-    const { username, password, role } = req.body;
-
-    // TODO: Add validation for username, password, and role here
-
-    // Hash the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-
-    // Create a new user instance and save it to the database
-    const user = new userModel({
-      username,
-      password: hashedPassword,
-      role // Assuming your user model has a 'role' field
-    });
-
-    await user.save();
-
-    // Send back a response
-    res.status(201).json({
-      message: 'User created successfully',
-      user: {
-        id: user._id,
-        username: user.username,
-        role: user.role
-      }
-    });
-  } catch (error) {
-    res.status(500).json({ message: 'Error creating user', error: error.message });
-  }
-});
-
 // Assuming JWT_SECRET and REFRESH_TOKEN_SECRET are defined in your environment
 const { JWT_SECRET, REFRESH_TOKEN_SECRET } = process.env;
 
 router.post('/login', async (req, res) => {
   // Login Route
-  // #swagger.tags = ['User']
+  // #swagger.tags = ['user']
   // #swagger.description = 'Endpoint for user login.'
   // #swagger.parameters['user'] = {
   //     in: 'body',
@@ -99,9 +51,10 @@ router.post('/login', async (req, res) => {
     if(!user) {
       return res.status(401).send({ message: 'Invalid username or password' });
     }
-    /*if (!user || !(await bcrypt.compare(password, user.password))) {
+    
+    if (!user || !(await bcrypt.compare(password, user.password))) {
       return res.status(401).send({ message: 'Invalid username or password' });
-    }*/
+    }
 
     // Generate tokens
     const accessToken = jwt.sign({ userId: user._id, role: user.role }, JWT_SECRET, { expiresIn: '1d' });
@@ -131,9 +84,9 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.post('/refresh-token', async (req, res) => {
+router.post('/refresh-token', authorize(['inspector', 'inspector_coordinator']), async (req, res) => {
   // Refresh Token Route
-  // #swagger.tags = ['User']
+  // #swagger.tags = ['user']
   // #swagger.description = 'Endpoint to refresh access token.'
   // #swagger.parameters['refreshToken'] = {
   //     in: 'body',
@@ -177,9 +130,9 @@ router.post('/refresh-token', async (req, res) => {
   });
 });
 
-router.post('/logout', async (req, res) => {
+router.post('/logout', authorize(['inspector', 'inspector_coordinator']), async (req, res) => {
   // Logout Route
-  // #swagger.tags = ['User']
+  // #swagger.tags = ['user']
   // #swagger.description = 'Endpoint to log out a user.'
   // #swagger.parameters['refreshToken'] = {
   //     in: 'body',
@@ -194,9 +147,8 @@ router.post('/logout', async (req, res) => {
   res.send({ message: 'Logged out successfully' });
 });
 
-
-router.get("/admin/users", async (req, res) => {
-  // #swagger.tags = ['admin']
+router.get("/users", async (req, res) => {
+  // #swagger.tags = ['user']
   // #swagger.description = 'Endpoint to retrieve a list of all users.'
   // #swagger.responses[200] = {
   //     description: 'Successful operation: Returns a list of users.',

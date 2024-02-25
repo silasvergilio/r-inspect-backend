@@ -4,38 +4,7 @@ var inspectorModel = require("../model/inspector");
 var inspectionModel = require("../model/inspection");
 
 
-router.post("/", async function (req, res, next) {
-  // Create Inspection
-  // #swagger.tags = ['Inspection']
-  // #swagger.description = 'Creates a new inspection with the provided details.'
-  // #swagger.parameters['body'] = {
-  //   in: 'body',
-  //   description: 'Inspection details',
-  //   required: true,
-  //   schema: { $ref: "#/definitions/Inspection" }
-  // }
-  // #swagger.responses[204] = { description: 'Inspection created successfully.' }
-  // #swagger.responses[500] = { description: 'Error occurred while creating the inspection.' }
-
-  let body = req.body;
-  console.log(req.body);
-  const newInspection = inspectionModel(body);
-
-  try {
-    await newInspection.save();
-    res.status(204).json({
-      message: "Inspeção criada com sucesso",
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
-      message: "Erro ao criar a inspeção",
-      status: 500,
-    });
-  }
-});
-
-router.get("/", async (req, res, next) => {
+router.get("/", authorize(['inspector', 'inspector_coordinator']), async (req, res, next) => {
   // Get Inspections
   // #swagger.tags = ['Inspection']
   // #swagger.description = 'Retrieves a list of all inspections.'
@@ -58,7 +27,7 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.patch("/", async (req, res, next) => {
+router.patch("/", authorize(['inspector', 'inspector_coordinator']), async (req, res, next) => {
   // Update Inspection
   // #swagger.tags = ['Inspection']
   // #swagger.description = 'Updates an existing inspection based on the team number.'

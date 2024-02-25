@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 var inspectorModel = require("../model/inspector");
 
-router.post("/", async function (req, res, next) {
+router.post("/", authorize(['inspector_coordinator']), async function (req, res, next) {
   // POST /inspector
   // Adds a new inspector to the database
   // #swagger.tags = ['Inspector']
@@ -35,7 +35,7 @@ router.post("/", async function (req, res, next) {
   }
 });
 
-router.get("/", async function (req, res, next) {
+router.get("/", authorize(['inspector', 'inspector_coordinator']), async function (req, res, next) {
   // GET /inspector
   // Retrieves a list of all inspectors from the database
   // #swagger.tags = ['Inspector']
