@@ -1,10 +1,8 @@
 var express = require("express");
 var router = express.Router();
-var inspectorModel = require("../model/inspector");
 var inspectionModel = require("../model/inspection");
 
 const authorize = require('../middlewares/roleBasedAccessControl');
-
 
 router.get("/", authorize(['inspector', 'inspector_coordinator']), async (req, res, next) => {
   // Get Inspections
@@ -20,6 +18,38 @@ router.get("/", authorize(['inspector', 'inspector_coordinator']), async (req, r
     var inspections = await inspectionModel.find({});
 
     res.status(200).json(inspections);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Erro ao buscar Inspeções",
+      status: 500,
+    });
+  }
+});
+
+router.get("/simplified", async (req, res, next) => {
+  // Get Inspections
+  // #swagger.tags = ['Inspection']
+  // #swagger.description = 'Retrieves a list of all inspections.'
+  // #swagger.responses[200] = {
+  //   description: 'List of inspections.',
+  //   schema: { $ref: "#/definitions/InspectionArray" }
+  // }
+  // #swagger.responses[500] = { description: 'Error occurred while retrieving inspections.' }
+
+  try {
+    var inspections = await inspectionModel.find({});
+
+    const simplifiedInspections = inspections.map((inspection) => { 
+      return {
+        inspectorId: inspection.inspectorId,
+        teamNumber: inspection.teamNumber,
+        teamName: inspection.teamName,
+        status: inspection.status,
+        sheet: null} 
+    });
+
+    res.status(200).json(simplifiedInspections);
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -73,11 +103,6 @@ router.post("/", authorize(['inspector_coordinator']), async (req, res, next) =>
 
   // Input validation
   const { inspectorId, teamNumber, teamName, status, sheet } = req.body;
-  console.log('inspectorId', inspectorId)
-  console.log('teamNumber', teamNumber)
-  console.log('teamName', teamName)
-  console.log('status', status)
-  console.log('sheet', sheet)
 
   if (!teamNumber || !status) {
     return res.status(400).json({
