@@ -2,21 +2,355 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "REST API",
-    "description": ""
+    "title": "r-inspect API Documentation",
+    "description": "API Documentation for the r-inspect API"
   },
   "host": "localhost:3000",
   "basePath": "/",
   "schemes": [
-    "http"
+    "http",
+    "https"
+  ],
+  "securityDefinitions": {
+    "rInspectApiKey": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "x-api-key",
+      "description": "Constant api key \"r-inspect\" is required to access the API endpoints."
+    },
+    "bearerAuth": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "Authorization",
+      "description": "Admin secret key is required to access the admin endpoints."
+    },
+    "adminSecretKey": {
+      "type": "apiKey",
+      "in": "header",
+      "name": "admin-secret-key",
+      "description": "Admin secret key is required to access the admin endpoints."
+    }
+  },
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
   ],
   "paths": {
     "/": {
       "get": {
-        "description": "",
+        "tags": [
+          "Home"
+        ],
+        "description": "Endpoint to retrieve the home page.",
+        "responses": {
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/users/": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "description": "Endpoint to retrieve a list of all users.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/me": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "description": "Endpoint to retrieve the user associated with the provided auth token.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "description": "Endpoint for user login.",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/users/refresh-token": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "description": "Endpoint to refresh access token.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "refreshToken": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "description": "Endpoint to log out a user.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "refreshToken": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logged out successfully."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          }
+        }
+      }
+    },
+    "/users/users": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "description": "Endpoint to retrieve a list of all users.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/teams/": {
+      "get": {
+        "tags": [
+          "Teams"
+        ],
+        "description": "Endpoint to retrieve a list of all teams.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/inspector/": {
+      "post": {
+        "tags": [
+          "Inspector"
+        ],
+        "summary": "Add a new inspector to the database",
+        "description": "Endpoint to add a new inspector to the database.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Inspector created successfully."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Error occurred while creating the inspector."
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Inspector"
+        ],
+        "summary": "Retrieve all inspectors",
+        "description": "Endpoint to retrieve a list of all inspectors from the database.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/inspection/": {
+      "get": {
+        "tags": [
+          "Inspection"
+        ],
+        "description": "Retrieves a list of all inspections.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "500": {
             "description": "Internal Server Error"
@@ -24,10 +358,264 @@
         }
       },
       "post": {
-        "description": "",
+        "tags": [
+          "Inspection"
+        ],
+        "description": "Creates a new inspection.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "inspectorId": {
+                  "example": "any"
+                },
+                "teamNumber": {
+                  "example": "any"
+                },
+                "teamName": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "sheet": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
-          "204": {
-            "description": "No Content"
+          "201": {
+            "description": "Inspection created successfully."
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Error occurred while creating the inspection."
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Inspection"
+        ],
+        "description": "Updates an existing inspection based on the team number.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "inspectorId": {
+                  "example": "any"
+                },
+                "teamNumber": {
+                  "example": "any"
+                },
+                "teamName": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "sheet": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "201": {
+            "description": "Inspection updated successfully."
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Error occurred while updating the inspection."
+          }
+        }
+      }
+    },
+    "/inspection/simplified": {
+      "get": {
+        "tags": [
+          "Inspection"
+        ],
+        "description": "Retrieves a list of all inspections.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/inspection/{teamNumber}": {
+      "get": {
+        "tags": [
+          "Inspection"
+        ],
+        "description": "Retrieves an inspection based on the team number.",
+        "parameters": [
+          {
+            "name": "teamNumber",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Team number"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inspection found.",
+            "schema": {
+              "$ref": "#/definitions/Inspection"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Inspection not found."
+          },
+          "500": {
+            "description": "Error occurred while retrieving the inspection."
+          }
+        }
+      }
+    },
+    "/admin/CreateCleanSheetsForTeams": {
+      "get": {
+        "tags": [
+          "admin"
+        ],
+        "description": "Endpoint to create clean sheets for all teams. Requires admin secret key for authorization.",
+        "parameters": [
+          {
+            "name": "admin-secret-key",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Clean sheets for all teams created successfully."
+          },
+          "400": {
+            "description": "Inspections table must be empty before running this operation or no teams found to create clean sheets for."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Unauthorized access."
+          },
+          "500": {
+            "description": "Failed to create clean sheets for teams."
+          }
+        }
+      }
+    },
+    "/admin/user": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "description": "Endpoint to register a new user.",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "role": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
           },
           "500": {
             "description": "Internal Server Error"
@@ -35,10 +623,53 @@
         }
       },
       "patch": {
-        "description": "",
+        "tags": [
+          "admin"
+        ],
+        "description": "Endpoint\r  //",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "role": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
           }
         }
       }
