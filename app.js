@@ -3,19 +3,28 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const cors = require('cors');
+
+require('dotenv').config();
+
 const conn = require("./db/conn");
+
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var teamsRouter = require("./routes/teams");
 var inspectorRouter = require("./routes/inspector");
 var inspectionRouter = require("./routes/inspection");
+var adminRouter = require("./routes/admin");
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger_output.json");
 
 var app = express();
 conn();
+
+app.use(cors());
+
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "jade");
@@ -27,11 +36,15 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+const validateApiKey = require('./middlewares/validateApiKey');
+app.use(validateApiKey);
+
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/teams", teamsRouter);
 app.use("/inspector", inspectorRouter);
 app.use("/inspection", inspectionRouter);
+app.use("/admin", adminRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -49,8 +62,8 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log("Listening on http://localhost:3000");
+app.listen(process.env.PORT || 8080, () => {
+  console.log("Listening on http://localhost:8080");
 });
 
 module.exports = app;
