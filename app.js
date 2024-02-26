@@ -23,7 +23,12 @@ const swaggerFile = require("./swagger_output.json");
 var app = express();
 conn();
 
-app.use(cors());
+
+app.use(cors({
+  origin: [process.env.FRONTEND_URL],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
+  credentials: true,
+}));
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
