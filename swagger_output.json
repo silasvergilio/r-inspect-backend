@@ -271,6 +271,48 @@
         }
       }
     },
+    "/teams/{teamNumber}": {
+      "get": {
+        "tags": [
+          "Team Individually"
+        ],
+        "description": "Retrieves a team based on the team number.",
+        "parameters": [
+          {
+            "name": "teamNumber",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Team number"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Team found.",
+            "schema": {
+              "$ref": "#/definitions/Inspection"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Team not found."
+          },
+          "500": {
+            "description": "Error occurred while retrieving the team."
+          }
+        }
+      }
+    },
     "/inspector/": {
       "post": {
         "tags": [
@@ -325,6 +367,43 @@
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/inspector/{name}": {
+      "delete": {
+        "tags": [
+          "Inspector"
+        ],
+        "summary": "Delete an inspector",
+        "description": "Endpoint to delete an inspector from the database.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Name of the inspector to delete."
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Inspector deleted successfully."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Error occurred while deleting the inspector."
           }
         }
       }
@@ -536,6 +615,80 @@
         }
       }
     },
+    "/admin/BulkCreateTeams": {
+      "post": {
+        "tags": [
+          "admin"
+        ],
+        "description": "Endpoint to create teams. Requires admin secret key for authorization.",
+        "parameters": [
+          {
+            "name": "admin-secret-key",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Teams created successfully."
+          },
+          "400": {
+            "description": "Teams already exist."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Unauthorized access."
+          },
+          "500": {
+            "description": "Failed to create teams."
+          }
+        }
+      }
+    },
+    "/admin/DeleteAllTeams": {
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "description": "Endpoint to delete all teams. Requires admin secret key for authorization.",
+        "parameters": [
+          {
+            "name": "admin-secret-key",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All teams deleted successfully."
+          },
+          "400": {
+            "description": "Teams table is already empty."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Unauthorized access."
+          },
+          "500": {
+            "description": "Failed to delete all teams."
+          }
+        }
+      }
+    },
     "/admin/CreateCleanSheetsForTeams": {
       "get": {
         "tags": [
@@ -569,6 +722,43 @@
           },
           "500": {
             "description": "Failed to create clean sheets for teams."
+          }
+        }
+      }
+    },
+    "/admin/DeleteAllInspections": {
+      "delete": {
+        "tags": [
+          "admin"
+        ],
+        "description": "Endpoint to delete all inspections. Requires admin secret key for authorization.",
+        "parameters": [
+          {
+            "name": "admin-secret-key",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "All inspections deleted successfully."
+          },
+          "400": {
+            "description": "Inspections table is already empty."
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Unauthorized access."
+          },
+          "500": {
+            "description": "Failed to delete all inspections."
           }
         }
       }

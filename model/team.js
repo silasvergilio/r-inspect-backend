@@ -6,20 +6,15 @@ const Team = mongoose.Schema({
     required: true,
     unique: true
   },
-  teamName: {
+  name: {
     type: String,
     required: true
   },
-  status: {
+  state: {
     type: String,
-    required: true
-  },
-  sheet:{
-    type: Object,
     required: true
   }
-
 });
 
-const inspectionModel = mongoose.model("Teams", teamSchema);
-module.exports = Team;
+const teamModel = mongoose.model("Teams", Team);
+module.exports = teamModel;

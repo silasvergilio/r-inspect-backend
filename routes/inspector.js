@@ -67,5 +67,28 @@ router.get("/", authorize(['inspector', 'inspector_coordinator']), async functio
   }
 });
 
+router.delete("/:name", authorize(['inspector_coordinator']), async function (req, res, next) {
+  // DELETE /inspector/{name}
+  // Deletes an inspector from the database
+  // #swagger.tags = ['Inspector']
+  // #swagger.summary = 'Delete an inspector'
+  // #swagger.description = 'Endpoint to delete an inspector from the database.'
+  // #swagger.parameters['name'] = { description: 'Name of the inspector to delete.' }
+  // #swagger.responses[200] = { description: 'Inspector deleted successfully.' }
+  // #swagger.responses[500] = { description: 'Error occurred while deleting the inspector.' }
+  let name = req.params.name;
+  try {
+    await inspectorModel.deleteOne({ name: name });
+    res.status(200).json({
+      message: "Inspetor deletado com sucesso",
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Erro ao deletar o inspetor",
+      status: 500,
+    });
+  }
+});
 
 module.exports = router;
