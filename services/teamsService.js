@@ -12,7 +12,7 @@ class TeamsService {
 
     async getTeams() {
 
-         const eventCode = "JOHNSON";
+     const eventCode = "JOHNSON";
 
         try {
             const response = await this.firstApi.get("2024/teams", {
@@ -28,7 +28,7 @@ class TeamsService {
             console.error(error.message);
             throw new Error('Failed to fetch teams');
         }
-        
+
     return await teamModel.find({}); // busca do banco
 } 
     async getTeam(teamNumber) {

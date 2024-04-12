@@ -34,7 +34,7 @@ router.post("/BulkCreateTeams", authorize(['inspector_coordinator']), async (req
 
         // Add teams manually in the following format
         const teams = [
-            { teamNumber: 1, name: "Team 1", state: "State 1" },
+            { teamNumber: 1816, name: "The Green Machine", state: "Minnesota" },
             { teamNumber: 2, name: "Team 2", state: "State 2" },
             { teamNumber: 3, name: "Team 3", state: "State 3" },
         ]

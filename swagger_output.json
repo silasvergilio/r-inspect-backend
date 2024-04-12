@@ -623,11 +623,6 @@
         "description": "Endpoint to create teams. Requires admin secret key for authorization.",
         "parameters": [
           {
-            "name": "admin-secret-key",
-            "in": "header",
-            "type": "string"
-          },
-          {
             "name": "authorization",
             "in": "header",
             "type": "string"
@@ -659,11 +654,6 @@
         ],
         "description": "Endpoint to delete all teams. Requires admin secret key for authorization.",
         "parameters": [
-          {
-            "name": "admin-secret-key",
-            "in": "header",
-            "type": "string"
-          },
           {
             "name": "authorization",
             "in": "header",
