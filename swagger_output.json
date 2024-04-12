@@ -816,7 +816,7 @@
         "tags": [
           "admin"
         ],
-        "description": "Endpoint\r  //",
+        "description": "Endpoint  //",
         "parameters": [
           {
             "name": "authorization",

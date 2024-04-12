@@ -28,7 +28,8 @@ class TeamsService {
             console.error(error.message);
             throw new Error('Failed to fetch teams');
         }
-    return await teamModel.find({});
+        
+    return await teamModel.find({}); // busca do banco
 } 
     async getTeam(teamNumber) {
         return await teamModel.findOne({ teamNumber: teamNumber });
