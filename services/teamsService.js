@@ -11,10 +11,8 @@ class TeamsService {
     }
 
     async getTeams() {
-        return await teamModel.find({});
 
-
-        /* const eventCode = "BRBR";
+         const eventCode = "JOHNSON";
 
         try {
             const response = await this.firstApi.get("2024/teams", {
@@ -29,9 +27,9 @@ class TeamsService {
         } catch (error) {
             console.error(error.message);
             throw new Error('Failed to fetch teams');
-        }*/
-    }
-
+        }
+    return await teamModel.find({});
+} 
     async getTeam(teamNumber) {
         return await teamModel.findOne({ teamNumber: teamNumber });
     }
