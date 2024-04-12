@@ -182,4 +182,23 @@ router.get("/users", async (req, res) => {
     res.status(500).send("An error occurred while fetching users.");
   }
 });
+
+router.delete("/user/:name", authorize(['inspector', 'inspector_coordinator']), async (req, res) => {
+  // #swagger.tags = ['user']
+  // #swagger.description = 'Endpoint to retrieve a list of all users.'
+  // #swagger.responses[200] = {
+  //     description: 'Successful operation: Returns a list of users.',
+  //     schema: { $ref: "#/definitions/UsersArray" }
+  // }
+  // #swagger.responses[500] = { description: 'Server error: An error occurred while fetching users.' }
+  try {
+    await userModel.deleteOne({ name: req.params.name });
+    res.status(200).send("User deleted successfully.");
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("An error occurred while fetching users.");
+  }
+});
+
+
 module.exports = router;
