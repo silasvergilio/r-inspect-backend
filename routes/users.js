@@ -183,7 +183,7 @@ router.get("/users", async (req, res) => {
   }
 });
 
-router.delete("/user/:name", authorize(['inspector', 'inspector_coordinator']), async (req, res) => {
+router.delete("/:name", authorize(['inspector', 'inspector_coordinator']), async (req, res) => {
   // #swagger.tags = ['user']
   // #swagger.description = 'Endpoint to retrieve a list of all users.'
   // #swagger.responses[200] = {
@@ -192,7 +192,7 @@ router.delete("/user/:name", authorize(['inspector', 'inspector_coordinator']), 
   // }
   // #swagger.responses[500] = { description: 'Server error: An error occurred while fetching users.' }
   try {
-    await userModel.deleteOne({ name: req.params.name });
+    await userModel.deleteOne({ username: req.params.name });
     res.status(200).send("User deleted successfully.");
   } catch (error) {
     console.error(error);
