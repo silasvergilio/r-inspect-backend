@@ -15,7 +15,7 @@ router.get("/", async (req, res) => {
     // }
     // #swagger.responses[500] = { description: 'Server error: An error occurred while fetching teams.' }
     try {
-        const teams = await teamsService.getTeams();
+        const teams = await teamsService.getTeams(); //
         res.status(200).json(teams);
     } catch (error) {
         console.error(error);
