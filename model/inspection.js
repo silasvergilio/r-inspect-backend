@@ -20,7 +20,7 @@ const Inspection = mongoose.Schema({
   },
   sheet:{
     type: Object,
-    required: true
+    required: false
   }
 
 });
