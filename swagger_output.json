@@ -249,6 +249,41 @@
         }
       }
     },
+    "/users/{name}": {
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "description": "Endpoint to retrieve a list of all users.",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/teams/": {
       "get": {
         "tags": [
@@ -623,6 +658,11 @@
         "description": "Endpoint to create teams. Requires admin secret key for authorization.",
         "parameters": [
           {
+            "name": "admin-secret-key",
+            "in": "header",
+            "type": "string"
+          },
+          {
             "name": "authorization",
             "in": "header",
             "type": "string"
@@ -654,6 +694,11 @@
         ],
         "description": "Endpoint to delete all teams. Requires admin secret key for authorization.",
         "parameters": [
+          {
+            "name": "admin-secret-key",
+            "in": "header",
+            "type": "string"
+          },
           {
             "name": "authorization",
             "in": "header",
@@ -806,7 +851,7 @@
         "tags": [
           "admin"
         ],
-        "description": "Endpoint  //",
+        "description": "Endpoint\r  //",
         "parameters": [
           {
             "name": "authorization",
