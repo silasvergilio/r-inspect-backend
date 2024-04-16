@@ -508,14 +508,11 @@ router.post('/user', authorize(['inspector_coordinator']), async (req, res) => {
             return res.status(400).json({ message: 'Invalid role' });
         }
 
-        // Hash the password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
 
         // Create a new user instance and save it to the database
         const user = new userModel({
             username,
-            password: hashedPassword,
+            password: password,
             role // Assuming your user model has a 'role' field
         });
 
