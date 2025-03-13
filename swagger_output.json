@@ -725,7 +725,7 @@
       }
     },
     "/admin/CreateCleanSheetsForTeams": {
-      "get": {
+      "post": {
         "tags": [
           "admin"
         ],
